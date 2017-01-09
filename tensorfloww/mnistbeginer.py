@@ -1,4 +1,4 @@
-#encoding:utf8
+# encoding:utf8
 '''
 来自tensorflow官方文档：http://tensorfly.cn/tfdoc/tutorials/mnist_beginners.html
 该程序先是介绍了mnist数据集，mnist数据集是手写识别数据集，它包含6000个训练数据
@@ -9,18 +9,21 @@
 最后介绍了用tensorflow实现多分类.
 '''
 
-import input_data
 import tensorflow as tf
 
-mnist=input_data.read_data_sets("MNIST_data/",one_hot=True)
+import input_data
 
-#对于x这个待输入的自变量使用占位函数来表示其shape和数据类型
-x=tf.placeholder("float",[None,784])
-#对于w,b这样的参数使用variable并且使用０来初始化
-W=tf.Variable(tf.zeros([784,10]))
-b=tf.Variable(tf.zeros([10]))
-#对与y直接使用将x,w,b的线性组合带入softmax中
+mnist = input_data.read_data_sets("MNIST_data/", one_hot = True)
+
+# 对于x这个待输入的自变量使用占位函数来表示其shape和数据类型
+x =tf.placeholder("float",[None,784])
+# 对于w,b这样的参数使用variable并且使用０来初始化
+W =tf.Variable(tf.zeros([784,10]))
+b =tf.Variable(tf.zeros([10]))
+# 对与y直接使用将x,w,b的线性组合带入softmax中
 y=tf.nn.softmax(tf.matmul(x,W)+b)
+
+
 """
 到这里一个一次性的的tensorflow计算图就完成了，注意输入只有x,w,b都是先定义后修正的。
 """
@@ -56,6 +59,11 @@ print(sess.run(accuracy,feed_dict={x:mnist.test.images,y_:mnist.test.labels}))
 
 #问题：
 #数据保存问题
+"""数据batch_xs,batch_ys只在最后一刻使用了。其他如w,b定义为tf.Variables为张量"""
 #为什么多次进行sess.run，比如计算accuracy时为什么还要run,它和sklearn里面的train,fit有何区别?
+"""只要是tf中的张量得到它的值必须通过run"""
 #该模型还能打印出更多东西吗？
-#这里面没哟激活函数，损失函数和迭代方法选别的是怎样的情景，反向传播是怎样做的?
+"""
+有没有类似于keras里的打印日志?
+"""
+#这里面没有激活函数，损失函数和迭代方法选别的是怎样的情景，反向传播是怎样做的?
